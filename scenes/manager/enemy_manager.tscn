@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://cs8170q7tbtfy"]
+
+[ext_resource type="Script" path="res://scenes/manager/enemy_manager.gd" id="1_jr4y1"]
+[ext_resource type="PackedScene" uid="uid://tt6ovpb0203p" path="res://scenes/game_objects/basic_enemy/basic_enemy.tscn" id="2_m2va0"]
+
+[node name="EnemyManager" type="Node"]
+script = ExtResource("1_jr4y1")
+spawn_radius = 350
+basic_enemy_scene = ExtResource("2_m2va0")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

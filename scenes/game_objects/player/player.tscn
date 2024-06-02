@@ -1,0 +1,84 @@
+[gd_scene load_steps=10 format=3 uid="uid://eq2vuu278wxp"]
+
+[ext_resource type="Texture2D" uid="uid://d38k4y2olm1wd" path="res://scenes/game_objects/player/tile_0098.png" id="1_jxrk1"]
+[ext_resource type="Script" path="res://scenes/game_objects/player/player.gd" id="1_jyxjq"]
+[ext_resource type="PackedScene" uid="uid://codb7g5j7r278" path="res://scenes/abilities/sword_ability_controller/sword_ability_controller.tscn" id="2_mxana"]
+[ext_resource type="PackedScene" uid="uid://bu23t7jeagt6i" path="res://scenes/component/health_component.tscn" id="2_nucdp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wdvlt"]
+bg_color = Color(0.247059, 0.14902, 0.192157, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1dm16"]
+bg_color = Color(0.262745, 0.882353, 0.701961, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.247059, 0.14902, 0.192157, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5ogpe"]
+radius = 14.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8s7p5"]
+radius = 8.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ojt3t"]
+radius = 5.0
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+motion_mode = 1
+script = ExtResource("1_jyxjq")
+MAX_SPEED = 125
+ACCELERATION = 25
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_nucdp")]
+
+[node name="AbilityManager" type="Node" parent="."]
+
+[node name="SwordAbilityController" parent="AbilityManager" instance=ExtResource("2_mxana")]
+
+[node name="DamageIntervalTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(32, 6)
+offset_left = -16.0
+offset_top = -28.0
+offset_right = 16.0
+offset_bottom = -22.0
+pivot_offset = Vector2(16, 3)
+theme_override_styles/background = SubResource("StyleBoxFlat_wdvlt")
+theme_override_styles/fill = SubResource("StyleBoxFlat_1dm16")
+max_value = 1.0
+value = 0.5
+show_percentage = false
+
+[node name="PickupArea2D" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea2D"]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_5ogpe")
+
+[node name="EnemyCollisionArea2D" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyCollisionArea2D"]
+position = Vector2(0, -7)
+shape = SubResource("CircleShape2D_8s7p5")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -8)
+texture = ExtResource("1_jxrk1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -5)
+shape = SubResource("CircleShape2D_ojt3t")
+
+[connection signal="timeout" from="DamageIntervalTimer" to="." method="on_damage_interval_timer_timeout"]
+[connection signal="body_entered" from="EnemyCollisionArea2D" to="." method="on_enemy_collision_area_body_entered"]
+[connection signal="body_exited" from="EnemyCollisionArea2D" to="." method="on_enemy_collision_area_body_exited"]

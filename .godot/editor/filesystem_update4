@@ -1,0 +1,11 @@
+res://scenes/manager/arena_time_manager.tscn
+res://resources/tileset.tres
+res://scenes/manager/arena_time_manager.gd
+res://scenes/game_objects/player/player.gd
+res://scenes/manager/enemy_manager.tscn
+res://scenes/manager/enemy_manager.gd
+res://scenes/main/main.tscn
+res://scenes/main/main.gd
+res://scenes/game_objects/player/player.tscn
+res://scenes/component/health_component.tscn
+res://scenes/ui/end_screen.tscn
